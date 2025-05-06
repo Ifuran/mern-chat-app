@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+const { app, server } = require("./socket/socket");
 const dotenv = require("dotenv");
 const connectToDatabase = require("./db/database");
 const cookieParser = require("cookie-parser");
@@ -18,7 +18,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToDatabase();
   console.log(`Server is running on http://localhost:${PORT}`);
 });

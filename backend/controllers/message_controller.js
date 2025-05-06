@@ -24,7 +24,7 @@ const sendMessage = async (req, res) => {
     });
 
     if (newMessage) {
-      conversation.messages.push(newMessage);
+      conversation.messages.push(newMessage._id);
     }
 
     await Promise.all([conversation.save(), newMessage.save()]);
@@ -52,7 +52,11 @@ const getMessage = async (req, res) => {
     }).populate("messages");
 
     if (!conversation) {
-      return res.status(200).json([]);
+      return res.status(200).json({
+        success: true,
+        message: "Getting conversation success!",
+        data: [],
+      });
     }
 
     const messages = conversation.messages;

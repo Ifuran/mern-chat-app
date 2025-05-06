@@ -8,7 +8,7 @@ const signup = async (req, res) => {
 
     if (password !== confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Password don't match",
       });
     }
@@ -16,7 +16,7 @@ const signup = async (req, res) => {
     const user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Username already exists",
       });
     }
@@ -39,19 +39,19 @@ const signup = async (req, res) => {
       await newUser.save();
 
       return res.status(201).json({
-        status: true,
+        success: true,
         message: "Signup success!",
         data: newUser,
       });
     } else {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Invalid user data",
       });
     }
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: error.message,
     });
   }
@@ -68,7 +68,7 @@ const login = async (req, res) => {
 
     if (!user || !isPasswordCorrect) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Invalid username or password",
       });
     }
@@ -76,12 +76,13 @@ const login = async (req, res) => {
     generateTokenAndSetCookie(user._id, res);
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Login success!",
+      data: user,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: error.message,
     });
   }
@@ -91,12 +92,12 @@ const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Logout success!",
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: error.message,
     });
   }
